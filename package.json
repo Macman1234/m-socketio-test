@@ -1,0 +1,24 @@
+{
+  "name": "socketio-test",
+  "version": "1.0.0",
+  "description": "a test of serving dynamic content with Socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"There aren't any tests set up :(\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Macman1234/m-socketio-test.git"
+  },
+  "author": "Maclean Mansfield-Parisi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Macman1234/m-socketio-test/issues"
+  },
+  "homepage": "https://github.com/Macman1234/m-socketio-test#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "socket.io": "^1.7.2"
+  }
+}
