@@ -2,11 +2,13 @@
 
 <body>
     <h1>Simple Page</h1>
+    <p>  <a href="./dashboard.html">analytics page</a> 
     <script type="text/javascript" src="socket.io.min.js"></script>
+    <script src="moment-with-locales.min.js"></script>
     <script>
         var socket = io.connect('http://localhost:3000');
         socket.on('connect', function() {
-            socket.send(window.location);
+            socket.send(moment().format('MMMM Do YYYY, h:mm:ss a'));
         });
     </script>
 </body>
