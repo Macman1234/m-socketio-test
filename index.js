@@ -33,7 +33,7 @@ io.sockets.on('connection', function(socket) {
         console.log("Got message: " + message);
         fs.readFile('./log.txt', (err, data) => {
             if (err) throw err;
-            console.log(data.toString());
+            console.log("served data to: " + "PLACEHOLDER");
             io.sockets.emit('update', data.toString());
         });
     });

@@ -1,29 +1,49 @@
 <html>
 
-<body>
-    <h1>Simple Page</h1>
-    <div id="update"></div>
-    <script src="socket.io.min.js"></script>
-    <script src="jquery-3.1.1.min.js"></script>
-    <script src="moment-with-locales.min.js"></script>
-    <script>
-        var socket = io.connect();
-        socket.on('connect', function() {
-            window.setInterval(function() {
-                socket.send("ping");
-            }, 5000);
-            socket.on('update', function(msg) {
-                //var message = msg.split('\n');
-                //var towrite = '';
-                //for (i = 0; i < message.length; i++) {
-                //    towrite = towrite.concat('<br>' + message[i] + '</p>');
-                //}
-                $('#update').html(msg.replace(/\n/g, '<br>'));
-                console.log(msg);
-                console.log('sending: ' + msg.replace(/\n/g, '<br>'));
-            });
+<head>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<script src="socket.io.min.js"></script>
+<script src="jquery-3.1.1.min.js"></script>
+<script src="moment-with-locales.min.js"></script>
+
+<script>
+    var socket = io.connect();
+    socket.on('connect', function() {
+        window.setInterval(function() {
+            socket.send("ping");
+        }, 5000);
+        var oldcontent = ''
+        socket.on('update', function(msg) {
+            var tosend = msg.replace(/\n/g, '<br>')
+            if (tosend === oldcontent) {
+                console.log('no change');
+            } else {
+                $('#update').html(tosend);
+                console.log('updating with: ' + tosend);
+                if (oldcontent !== '') {
+                    $("#button").fadeIn()
+                }
+            }
+            oldcontent = tosend;
         });
-    </script>
+        socket.send("ping");
+        $("#update").scrollTop($("#update").get(0).scrollHeight);
+        $("#button").fadeOut(0)
+    });
+    $(document).ready(function() {
+        $("#button").click(function() {
+            $("#update").scrollTop($("#update").get(0).scrollHeight);
+            $("#button").fadeOut(0)
+        });
+    });
+</script>
+
+<body>
+    <h1>showing log</h1>
+    <div id="update"></div>
+    <button id="button"></button>
 </body>
 
 </html>
