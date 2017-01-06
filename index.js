@@ -2,12 +2,11 @@ var express = require('express'),
     path = require('path'),
     http = require('http'),
     io = require('socket.io'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    fs = require('fs');
 
 var app = express();
 
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
 var util = require('util');
 
 app.set('port', 8080);
@@ -15,9 +14,9 @@ app.set('port', 8080);
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = http.createServer(app);
-io = io.listen(3000);
+io = io.listen(server);
 
-io.set('authorization', function(handshakeData, callback) {
+io.set('authorization', (handshakeData, callback) => {
     if (handshakeData.xdomain) {
         callback('Cross-domain connections are not allowed');
     } else {
@@ -30,16 +29,12 @@ server.listen(app.get('port'), function() {
 });
 
 io.sockets.on('connection', function(socket) {
-    // console.log(socket);
-  process.stdin.on('data', function (text) {
-    console.log('received data:', util.inspect(text));
-    });
     socket.on('message', function(message) {
-	ip = socket.request.connection.remoteAddress;;
-        console.log("Got message: " + message + " from: " + ip);
-        io.sockets.emit('pageview', {
-            'url': message
+        console.log("Got message: " + message);
+        fs.readFile('./log.txt', (err, data) => {
+            if (err) throw err;
+            console.log(data.toString());
+            io.sockets.emit('update', data.toString());
         });
     });
-
 });
